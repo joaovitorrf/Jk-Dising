@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JK Dising & Assessorias | Personalização & Serviços</title>
+  <meta name="description" content="Canecas, chaveiros, copos personalizados, cartões de visita e serviços de documentação. JK Dising & Assessorias — qualidade e elegância para sua marca." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --gold:       #C9A84C;
+      --gold-light: #F0D080;
+      --gold-dark:  #8A6820;
+      --black:      #0A0A0A;
+      --black-soft: #111111;
+      --black-card: #161616;
+      --black-mid:  #1E1E1E;
+      --text:       #E8E0D0;
+      --text-muted: #8A8070;
+      --border:     rgba(201,168,76,0.18);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--text);
+      font-family: 'Raleway', sans-serif;
+      font-weight: 400;
+      overflow-x: hidden;
+    }
+
+    /* ── CURSOR ── */
+    .cursor {
+      position: fixed; width: 12px; height: 12px;
+      border-radius: 50%; background: var(--gold);
+      pointer-events: none; z-index: 9999;
+      transform: translate(-50%,-50%);
+      transition: transform 0.08s, opacity 0.3s;
+      mix-blend-mode: difference;
+    }
+    .cursor-ring {
+      position: fixed; width: 36px; height: 36px;
+      border-radius: 50%; border: 1px solid var(--gold);
+      pointer-events: none; z-index: 9998;
+      transform: translate(-50%,-50%);
+      transition: transform 0.18s ease, width 0.2s, height 0.2s;
+      opacity: 0.5;
+    }
+
+    /* ── PARTICLES CANVAS ── */
+    #particles { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+
+    /* ── NAVBAR ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 6vw;
+      height: 70px;
+      background: rgba(10,10,10,0.85);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      transition: background 0.3s;
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.35rem; font-weight: 700;
+      letter-spacing: 0.04em;
+      background: linear-gradient(135deg, var(--gold-light), var(--gold), var(--gold-dark));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .nav-links { display: flex; gap: 2.2rem; list-style: none; }
+    .nav-links a {
+      color: var(--text-muted); font-size: 0.8rem; font-weight: 500;
+      letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none;
+      transition: color 0.25s;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: -3px; left: 0;
+      width: 0; height: 1px; background: var(--gold);
+      transition: width 0.3s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+    .nav-links a:hover::after { width: 100%; }
+    .nav-cta {
+      background: transparent; border: 1px solid var(--gold);
+      color: var(--gold); padding: 0.45rem 1.2rem;
+      font-family: 'Raleway', sans-serif; font-size: 0.75rem;
+      font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+      cursor: pointer; transition: background 0.25s, color 0.25s;
+      text-decoration: none;
+    }
+    .nav-cta:hover { background: var(--gold); color: var(--black); }
+
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--gold); transition: 0.3s; }
+
+    /* ── HERO ── */
+    #hero {
+      position: relative; min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      padding: 120px 6vw 60px;
+      overflow: hidden;
+    }
+    .hero-bg-circle {
+      position: absolute; width: 600px; height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(201,168,76,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      border: 1px solid var(--border);
+      padding: 0.35rem 1rem; margin-bottom: 2rem;
+      font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--gold); opacity: 0;
+      animation: fadeUp 0.8s 0.2s forwards;
+    }
+    .hero-badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--gold); animation: pulse 1.5s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.6rem, 7vw, 6rem);
+      font-weight: 900; line-height: 1.05;
+      letter-spacing: -0.02em;
+      opacity: 0; animation: fadeUp 0.9s 0.4s forwards;
+    }
+    h1 .gold {
+      background: linear-gradient(135deg, var(--gold-light), var(--gold), var(--gold-dark));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .hero-sub {
+      max-width: 560px; margin: 1.5rem auto 0;
+      font-size: 1.05rem; font-weight: 300; line-height: 1.7;
+      color: var(--text-muted);
+      opacity: 0; animation: fadeUp 0.9s 0.6s forwards;
+    }
+    .hero-btns {
+      display: flex; gap: 1rem; margin-top: 2.5rem; flex-wrap: wrap; justify-content: center;
+      opacity: 0; animation: fadeUp 0.9s 0.8s forwards;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      color: var(--black); padding: 0.85rem 2.2rem;
+      font-family: 'Raleway', sans-serif; font-weight: 700;
+      font-size: 0.8rem; letter-spacing: 0.12em; text-transform: uppercase;
+      border: none; cursor: pointer; text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 0 0 rgba(201,168,76,0);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(201,168,76,0.35); }
+    .btn-secondary {
+      background: transparent; border: 1px solid var(--border);
+      color: var(--text); padding: 0.85rem 2.2rem;
+      font-family: 'Raleway', sans-serif; font-weight: 500;
+      font-size: 0.8rem; letter-spacing: 0.12em; text-transform: uppercase;
+      cursor: pointer; text-decoration: none; transition: border-color 0.25s, color 0.25s;
+    }
+    .btn-secondary:hover { border-color: var(--gold); color: var(--gold); }
+
+    .hero-stats {
+      display: flex; gap: 3rem; margin-top: 4rem; flex-wrap: wrap; justify-content: center;
+      opacity: 0; animation: fadeUp 0.9s 1s forwards;
+    }
+    .stat { text-align: center; }
+    .stat-num {
+      font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700;
+      background: linear-gradient(135deg, var(--gold-light), var(--gold));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .stat-label { font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-muted); margin-top: 0.2rem; }
+    .stat-divider { width: 1px; background: var(--border); }
+
+    @keyframes fadeUp { from{opacity:0;transform:translateY(24px);} to{opacity:1;transform:translateY(0);} }
+
+    /* ── DIVIDER ── */
+    .section-divider {
+      display: flex; align-items: center; gap: 1rem;
+      margin: 0 auto 3.5rem; max-width: 180px;
+    }
+    .section-divider::before, .section-divider::after {
+      content: ''; flex: 1; height: 1px; background: var(--border);
+    }
+    .section-divider span { color: var(--gold); font-size: 1rem; }
+
+    /* ── SECTIONS ── */
+    section { position: relative; z-index: 1; padding: 100px 6vw; }
+    .section-label {
+      font-size: 0.68rem; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 0.7rem; text-align: center;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      font-weight: 700; text-align: center; margin-bottom: 1rem; line-height: 1.15;
+    }
+    .section-desc {
+      text-align: center; color: var(--text-muted); font-weight: 300;
+      max-width: 540px; margin: 0 auto 3.5rem; line-height: 1.75;
+    }
+
+    /* ── SERVICES ── */
+    #servicos { background: var(--black-soft); }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+    .service-card {
+      background: var(--black-card);
+      padding: 2.5rem 2rem;
+      cursor: default;
+      transition: background 0.3s;
+      position: relative; overflow: hidden;
+    }
+    .service-card::before {
+      content: ''; position: absolute; bottom: 0; left: 0;
+      width: 100%; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      transform: scaleX(0); transition: transform 0.4s;
+    }
+    .service-card:hover { background: var(--black-mid); }
+    .service-card:hover::before { transform: scaleX(1); }
+    .service-icon {
+      font-size: 2.2rem; margin-bottom: 1.2rem; display: block;
+    }
+    .service-title {
+      font-family: 'Playfair Display', serif; font-size: 1.2rem;
+      font-weight: 700; margin-bottom: 0.7rem; color: var(--gold-light);
+    }
+    .service-desc { font-size: 0.88rem; color: var(--text-muted); line-height: 1.75; }
+    .service-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1.2rem; }
+    .tag {
+      font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase;
+      border: 1px solid var(--border); color: var(--gold);
+      padding: 0.2rem 0.55rem;
+    }
+
+    /* ── HOW IT WORKS ── */
+    #como-funciona { background: var(--black); }
+    .steps { display: flex; gap: 0; position: relative; flex-wrap: wrap; }
+    .steps::before {
+      content: ''; position: absolute; top: 28px; left: 5%; right: 5%;
+      height: 1px; background: var(--border); z-index: 0;
+    }
+    .step {
+      flex: 1; min-width: 200px; text-align: center; padding: 0 1.5rem;
+      position: relative; z-index: 1;
+    }
+    .step-num {
+      width: 56px; height: 56px; border-radius: 50%;
+      border: 1px solid var(--gold); background: var(--black-card);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1.2rem;
+      font-family: 'Playfair Display', serif; font-size: 1.1rem;
+      color: var(--gold); font-weight: 700;
+      transition: background 0.3s, box-shadow 0.3s;
+    }
+    .step:hover .step-num { background: var(--gold); color: var(--black); box-shadow: 0 0 24px rgba(201,168,76,0.4); }
+    .step-title { font-weight: 600; font-size: 0.95rem; margin-bottom: 0.5rem; }
+    .step-desc { font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; }
+
+    /* ── PRODUTOS ── */
+    #produtos { background: var(--black-soft); }
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+    }
+    .product-card {
+      background: var(--black-card);
+      border: 1px solid var(--border);
+      padding: 2rem 1.5rem;
+      text-align: center;
+      transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+    }
+    .product-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--gold);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(201,168,76,0.15);
+    }
+    .product-emoji { font-size: 3rem; margin-bottom: 1rem; display: block; }
+    .product-name {
+      font-family: 'Playfair Display', serif; font-size: 1.1rem;
+      font-weight: 700; color: var(--gold-light); margin-bottom: 0.5rem;
+    }
+    .product-desc { font-size: 0.82rem; color: var(--text-muted); line-height: 1.65; }
+
+    /* ── DIFERENCIAIS ── */
+    #diferenciais { background: var(--black); }
+    .diff-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2rem; }
+    .diff-item { text-align: center; }
+    .diff-icon {
+      width: 60px; height: 60px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(201,168,76,0.12), transparent);
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1rem; font-size: 1.5rem;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .diff-item:hover .diff-icon { border-color: var(--gold); box-shadow: 0 0 20px rgba(201,168,76,0.2); }
+    .diff-title { font-weight: 600; font-size: 0.92rem; margin-bottom: 0.4rem; }
+    .diff-desc { font-size: 0.8rem; color: var(--text-muted); line-height: 1.6; }
+
+    /* ── OFÍCIOS ── */
+    #oficios {
+      background: var(--black-soft);
+    }
+    .oficios-inner {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
+    }
+    .oficios-text .section-title,
+    .oficios-text .section-label { text-align: left; }
+    .oficios-text .section-desc { text-align: left; margin-left: 0; }
+    .oficios-list { list-style: none; margin: 1.5rem 0 2rem; display: flex; flex-direction: column; gap: 0.85rem; }
+    .oficios-list li {
+      display: flex; align-items: center; gap: 0.75rem;
+      font-size: 0.9rem; color: var(--text-muted);
+    }
+    .oficios-list li::before {
+      content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--gold); flex-shrink: 0;
+    }
+    .oficios-visual {
+      background: var(--black-card); border: 1px solid var(--border);
+      padding: 2.5rem; position: relative; overflow: hidden;
+    }
+    .oficios-visual::before {
+      content: ''; position: absolute; top: -40px; right: -40px;
+      width: 160px; height: 160px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(201,168,76,0.08), transparent);
+    }
+    .doc-preview { display: flex; flex-direction: column; gap: 0.7rem; }
+    .doc-line { height: 10px; border-radius: 2px; background: var(--black-mid); }
+    .doc-line.gold { background: linear-gradient(90deg, var(--gold-dark), var(--gold)); width: 40%; }
+    .doc-line.w90 { width: 90%; }
+    .doc-line.w75 { width: 75%; }
+    .doc-line.w85 { width: 85%; }
+    .doc-line.w60 { width: 60%; }
+    .doc-line.w50 { width: 50%; }
+    .doc-stamp {
+      margin-top: 1.5rem; border: 2px solid var(--gold);
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 80px; height: 80px; border-radius: 50%;
+      color: var(--gold); font-size: 0.55rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase; text-align: center;
+      line-height: 1.3; transform: rotate(-12deg);
+      opacity: 0.7;
+    }
+
+    /* ── CONTATO ── */
+    #contato { background: var(--black); }
+    .contato-inner {
+      max-width: 680px; margin: 0 auto; text-align: center;
+    }
+    .contato-card {
+      background: var(--black-card); border: 1px solid var(--border);
+      padding: 3rem; margin-top: 2rem;
+    }
+    .contato-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; text-align: left; }
+    .form-group.full { grid-column: 1/-1; }
+    label { font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); }
+    input, textarea, select {
+      background: var(--black-mid); border: 1px solid var(--border);
+      color: var(--text); padding: 0.75rem 1rem;
+      font-family: 'Raleway', sans-serif; font-size: 0.88rem;
+      outline: none; transition: border-color 0.25s;
+      width: 100%;
+    }
+    input:focus, textarea:focus, select:focus { border-color: var(--gold); }
+    select option { background: var(--black-mid); }
+    textarea { resize: vertical; min-height: 110px; }
+    .form-submit { width: 100%; margin-top: 0.5rem; }
+
+    .contato-channels { display: flex; gap: 1rem; margin-top: 1.5rem; flex-wrap: wrap; justify-content: center; }
+    .channel {
+      display: flex; align-items: center; gap: 0.5rem;
+      border: 1px solid var(--border); padding: 0.6rem 1.1rem;
+      font-size: 0.8rem; color: var(--text-muted);
+      text-decoration: none; transition: border-color 0.25s, color 0.25s;
+    }
+    .channel:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--black-soft); border-top: 1px solid var(--border);
+      padding: 3rem 6vw;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 1.5rem;
+    }
+    .footer-logo {
+      font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700;
+      background: linear-gradient(135deg, var(--gold-light), var(--gold));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .footer-copy { font-size: 0.75rem; color: var(--text-muted); }
+    .footer-links { display: flex; gap: 1.5rem; }
+    .footer-links a { font-size: 0.75rem; color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--gold); }
+
+    /* ── WHATSAPP FLOAT ── */
+    .whatsapp-float {
+      position: fixed; bottom: 2rem; right: 2rem; z-index: 200;
+      width: 56px; height: 56px; border-radius: 50%;
+      background: linear-gradient(135deg, #25D366, #128C7E);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 20px rgba(37,211,102,0.35);
+      cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
+      text-decoration: none;
+    }
+    .whatsapp-float:hover { transform: scale(1.1); box-shadow: 0 8px 30px rgba(37,211,102,0.5); }
+    .whatsapp-float svg { width: 28px; height: 28px; fill: #fff; }
+
+    /* ── SCROLL REVEAL ── */
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s, transform 0.7s; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── MOBILE ── */
+    @media (max-width: 768px) {
+      .nav-links, .nav-cta { display: none; }
+      .hamburger { display: flex; }
+      nav.open .nav-links {
+        display: flex; flex-direction: column;
+        position: absolute; top: 70px; left: 0; right: 0;
+        background: var(--black-soft); padding: 1.5rem 6vw;
+        border-bottom: 1px solid var(--border); gap: 1.2rem;
+      }
+      nav.open .nav-cta { display: block; margin: 0 6vw 1rem; }
+      .steps::before { display: none; }
+      .oficios-inner { grid-template-columns: 1fr; }
+      .contato-grid { grid-template-columns: 1fr; }
+      .hero-stats { gap: 1.5rem; }
+      .stat-divider { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="particles"></canvas>
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursor-ring"></div>
+
+  <!-- NAV -->
+  <nav id="navbar">
+    <span class="nav-logo">JK Dising</span>
+    <ul class="nav-links">
+      <li><a href="#servicos">Serviços</a></li>
+      <li><a href="#produtos">Produtos</a></li>
+      <li><a href="#como-funciona">Como Funciona</a></li>
+      <li><a href="#oficios">Ofícios</a></li>
+      <li><a href="#contato">Contato</a></li>
+    </ul>
+    <a href="#contato" class="nav-cta">Solicitar Orçamento</a>
+    <div class="hamburger" id="hamburger">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-bg-circle"></div>
+    <div class="hero-badge">✦ Personalização & Assessorias</div>
+    <h1>
+      Sua marca merece<br>
+      <span class="gold">presença de ouro</span>
+    </h1>
+    <p class="hero-sub">
+      Canecas, chaveiros, copos e cartões personalizados com acabamento premium.
+      Além de serviços de documentação e assessoria para empresas e autônomos.
+    </p>
+    <div class="hero-btns">
+      <a href="#contato" class="btn-primary">Solicitar Orçamento</a>
+      <a href="#servicos" class="btn-secondary">Conhecer Serviços</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-num">500+</div>
+        <div class="stat-label">Clientes Atendidos</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat">
+        <div class="stat-num">100%</div>
+        <div class="stat-label">Personalizável</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat">
+        <div class="stat-num">3x</div>
+        <div class="stat-label">Serviços em um só lugar</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVIÇOS -->
+  <section id="servicos">
+    <div class="section-label reveal">O que fazemos</div>
+    <h2 class="section-title reveal">Nossos Serviços</h2>
+    <p class="section-desc reveal">
+      Tudo que sua marca precisa: do brinde personalizado ao documento oficial.
+      Qualidade, agilidade e atenção ao detalhe em cada entrega.
+    </p>
+    <div class="services-grid reveal">
+
+      <div class="service-card">
+        <span class="service-icon">🎨</span>
+        <div class="service-title">Personalizados</div>
+        <p class="service-desc">
+          Canecas, copos e chaveiros personalizados com logo, nome ou arte exclusiva.
+          Perfeitos para presentes corporativos, brindes e uso pessoal.
+        </p>
+        <div class="service-tags">
+          <span class="tag">Canecas</span>
+          <span class="tag">Copos</span>
+          <span class="tag">Chaveiros</span>
+          <span class="tag">Brindes</span>
+        </div>
+      </div>
+
+      <div class="service-card">
+        <span class="service-icon">💼</span>
+        <div class="service-title">Cartões de Visita</div>
+        <p class="service-desc">
+          Cartões de visita para empresas e autônomos. Design profissional que transmite
+          credibilidade e fica na memória dos seus clientes.
+        </p>
+        <div class="service-tags">
+          <span class="tag">Empresas</span>
+          <span class="tag">Autônomos</span>
+          <span class="tag">Design Pro</span>
+        </div>
+      </div>
+
+      <div class="service-card">
+        <span class="service-icon">📄</span>
+        <div class="service-title">Ofícios & Assessoria</div>
+        <p class="service-desc">
+          Elaboração de ofícios de compra e venda, declarações, contratos e demais
+          documentos com linguagem clara e juridicamente adequada.
+        </p>
+        <div class="service-tags">
+          <span class="tag">Ofícios</span>
+          <span class="tag">Declarações</span>
+          <span class="tag">Contratos</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- PRODUTOS -->
+  <section id="produtos">
+    <div class="section-label reveal">Catálogo</div>
+    <h2 class="section-title reveal">Produtos em Destaque</h2>
+    <p class="section-desc reveal">Escolha o produto ideal e a gente cuida do design e da personalização.</p>
+
+    <div class="products-grid reveal">
+      <div class="product-card">
+        <span class="product-emoji">☕</span>
+        <div class="product-name">Caneca Personalizada</div>
+        <p class="product-desc">Caneca de cerâmica ou porcelana com impressão de alta qualidade. Sua arte, seu estilo.</p>
+      </div>
+      <div class="product-card">
+        <span class="product-emoji">🥤</span>
+        <div class="product-name">Copo Personalizado</div>
+        <p class="product-desc">Copos em diversas opções: acrílico, inox térmico, vidro. Ideal para brindes corporativos.</p>
+      </div>
+      <div class="product-card">
+        <span class="product-emoji">🔑</span>
+        <div class="product-name">Chaveiro Personalizado</div>
+        <p class="product-desc">Chaveiros em acrílico, metal ou borracha com foto, nome ou logo. Um brinde que fica no dia a dia.</p>
+      </div>
+      <div class="product-card">
+        <span class="product-emoji">🪪</span>
+        <div class="product-name">Cartão de Visita</div>
+        <p class="product-desc">Cartões com design exclusivo, acabamento verniz, laminação ou texturizado. Primeira impressão que dura.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMO FUNCIONA -->
+  <section id="como-funciona">
+    <div class="section-label reveal">Processo</div>
+    <h2 class="section-title reveal">Como Funciona</h2>
+    <p class="section-desc reveal">Simples, rápido e sem complicação. Do pedido à entrega com total transparência.</p>
+
+    <div class="steps reveal">
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-title">Entre em Contato</div>
+        <p class="step-desc">Fale conosco pelo WhatsApp ou formulário. Conta o que precisa e a gente orienta.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-title">Envie Sua Arte</div>
+        <p class="step-desc">Mande logo, foto ou ideia. Se não tiver, criamos o design para você sem custo adicional.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <div class="step-title">Aprovação</div>
+        <p class="step-desc">Enviamos a prévia digital para sua aprovação. Só produzimos com o seu ok.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <div class="step-title">Produção & Entrega</div>
+        <p class="step-desc">Produzimos com qualidade e entregamos no prazo combinado. Satisfação garantida.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- OFÍCIOS -->
+  <section id="oficios">
+    <div class="oficios-inner reveal">
+      <div class="oficios-text">
+        <div class="section-label">Documentação</div>
+        <h2 class="section-title">Ofícios & Documentos Profissionais</h2>
+        <p class="section-desc">
+          Precisando redigir um documento oficial? A gente faz por você com linguagem adequada,
+          formatação correta e entrega rápida.
+        </p>
+        <ul class="oficios-list">
+          <li>Ofício de Compra e Venda</li>
+          <li>Declaração de Prestação de Serviços</li>
+          <li>Declaração de Renda</li>
+          <li>Declaração de Residência</li>
+          <li>Contratos Simples</li>
+          <li>Cartas Comerciais e Formais</li>
+          <li>Requerimentos e Petições</li>
+        </ul>
+        <a href="#contato" class="btn-primary">Solicitar Documento</a>
+      </div>
+
+      <div class="oficios-visual">
+        <div class="doc-preview">
+          <div class="doc-line gold"></div>
+          <div style="height:8px"></div>
+          <div class="doc-line w90"></div>
+          <div class="doc-line w75"></div>
+          <div class="doc-line w85"></div>
+          <div style="height:6px"></div>
+          <div class="doc-line w90"></div>
+          <div class="doc-line w60"></div>
+          <div class="doc-line w85"></div>
+          <div class="doc-line w75"></div>
+          <div style="height:6px"></div>
+          <div class="doc-line w50"></div>
+          <div class="doc-line w85"></div>
+          <div class="doc-line w60"></div>
+        </div>
+        <div style="display:flex;justify-content:flex-end">
+          <div class="doc-stamp">Docu&shy;mento Oficial</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DIFERENCIAIS -->
+  <section id="diferenciais">
+    <div class="section-label reveal">Por que escolher?</div>
+    <h2 class="section-title reveal">Nossos Diferenciais</h2>
+    <p class="section-desc reveal">Mais do que produtos — entregamos experiências e soluções completas.</p>
+
+    <div class="diff-grid reveal">
+      <div class="diff-item">
+        <div class="diff-icon">⚡</div>
+        <div class="diff-title">Entrega Rápida</div>
+        <p class="diff-desc">Prazos que respeitamos. Seu pedido chega quando combinado.</p>
+      </div>
+      <div class="diff-item">
+        <div class="diff-icon">✦</div>
+        <div class="diff-title">Design Incluso</div>
+        <p class="diff-desc">Criamos a arte do zero se precisar. Sem custo extra.</p>
+      </div>
+      <div class="diff-item">
+        <div class="diff-icon">🛡️</div>
+        <div class="diff-title">Qualidade Garantida</div>
+        <p class="diff-desc">Materiais selecionados e acabamento que impressiona.</p>
+      </div>
+      <div class="diff-item">
+        <div class="diff-icon">🤝</div>
+        <div class="diff-title">Atendimento Humano</div>
+        <p class="diff-desc">Você fala diretamente com quem faz. Sem burocracia.</p>
+      </div>
+      <div class="diff-item">
+        <div class="diff-icon">💰</div>
+        <div class="diff-title">Preço Justo</div>
+        <p class="diff-desc">Qualidade premium sem pagar absurdo. Orçamento sem compromisso.</p>
+      </div>
+      <div class="diff-item">
+        <div class="diff-icon">🔄</div>
+        <div class="diff-title">Revisão Gratuita</div>
+        <p class="diff-desc">Ajustamos o design até você ficar 100% satisfeito.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTATO -->
+  <section id="contato">
+    <div class="contato-inner">
+      <div class="section-label reveal">Fale conosco</div>
+      <h2 class="section-title reveal">Solicite seu Orçamento</h2>
+      <p class="section-desc reveal">Sem compromisso. Respondemos rapidinho.</p>
+
+      <div class="contato-card reveal">
+        <div class="contato-grid">
+          <div class="form-group">
+            <label for="nome">Nome</label>
+            <input type="text" id="nome" placeholder="Seu nome" />
+          </div>
+          <div class="form-group">
+            <label for="whats">WhatsApp</label>
+            <input type="tel" id="whats" placeholder="(00) 00000-0000" />
+          </div>
+          <div class="form-group full">
+            <label for="servico">Serviço de interesse</label>
+            <select id="servico">
+              <option value="">Selecione...</option>
+              <option>Caneca Personalizada</option>
+              <option>Copo Personalizado</option>
+              <option>Chaveiro Personalizado</option>
+              <option>Cartão de Visita</option>
+              <option>Ofício / Documento</option>
+              <option>Outro</option>
+            </select>
+          </div>
+          <div class="form-group full">
+            <label for="msg">Mensagem</label>
+            <textarea id="msg" placeholder="Descreva o que você precisa..."></textarea>
+          </div>
+        </div>
+        <button class="btn-primary form-submit" onclick="enviarWhatsApp()">
+          Enviar pelo WhatsApp ↗
+        </button>
+      </div>
+
+      <div class="contato-channels reveal">
+        <a href="https://wa.me/5594991234567" target="_blank" class="channel">
+          📱 WhatsApp
+        </a>
+        <a href="mailto:jkdising@email.com" class="channel">
+          ✉️ E-mail
+        </a>
+        <a href="https://instagram.com/jkdising" target="_blank" class="channel">
+          📸 Instagram
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <span class="footer-logo">JK Dising & Assessorias</span>
+    <span class="footer-copy">© 2025 JK Dising. Todos os direitos reservados.</span>
+    <div class="footer-links">
+      <a href="#servicos">Serviços</a>
+      <a href="#produtos">Produtos</a>
+      <a href="#contato">Contato</a>
+    </div>
+  </footer>
+
+  <!-- WHATSAPP FLOAT -->
+  <a href="https://wa.me/5594991234567" target="_blank" class="whatsapp-float" title="Falar no WhatsApp">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+    </svg>
+  </a>
+
+  <script>
+    // ── CURSOR ──
+    const cursor = document.getElementById('cursor');
+    const ring = document.getElementById('cursor-ring');
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top  = e.clientY + 'px';
+      ring.style.left   = e.clientX + 'px';
+      ring.style.top    = e.clientY + 'px';
+    });
+
+    // ── PARTICLES ──
+    const canvas = document.getElementById('particles');
+    const ctx = canvas.getContext('2d');
+    let W, H, pts = [];
+    function resize() {
+      W = canvas.width  = window.innerWidth;
+      H = canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+    for (let i = 0; i < 60; i++) {
+      pts.push({
+        x: Math.random() * 2000, y: Math.random() * 1200,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: (Math.random() - 0.5) * 0.3,
+        r: Math.random() * 1.5 + 0.5,
+        o: Math.random() * 0.4 + 0.1
+      });
+    }
+    function drawParticles() {
+      ctx.clearRect(0, 0, W, H);
+      pts.forEach(p => {
+        p.x += p.vx; p.y += p.vy;
+        if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
+        if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(201,168,76,${p.o})`;
+        ctx.fill();
+      });
+      // Draw connections
+      for (let i = 0; i < pts.length; i++) {
+        for (let j = i + 1; j < pts.length; j++) {
+          const dx = pts[i].x - pts[j].x;
+          const dy = pts[i].y - pts[j].y;
+          const d = Math.sqrt(dx * dx + dy * dy);
+          if (d < 120) {
+            ctx.beginPath();
+            ctx.moveTo(pts[i].x, pts[i].y);
+            ctx.lineTo(pts[j].x, pts[j].y);
+            ctx.strokeStyle = `rgba(201,168,76,${0.05 * (1 - d / 120)})`;
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+          }
+        }
+      }
+      requestAnimationFrame(drawParticles);
+    }
+    drawParticles();
+
+    // ── HAMBURGER ──
+    document.getElementById('hamburger').onclick = () => {
+      document.getElementById('navbar').classList.toggle('open');
+    };
+
+    // ── SCROLL REVEAL ──
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+    // ── NAVBAR SCROLL ──
+    window.addEventListener('scroll', () => {
+      document.getElementById('navbar').style.background =
+        window.scrollY > 40 ? 'rgba(10,10,10,0.98)' : 'rgba(10,10,10,0.85)';
+    });
+
+    // ── CONTADOR ANIMADO ──
+    function animateCount(el, end, suffix) {
+      let start = 0;
+      const dur = 1800;
+      const step = dur / end;
+      const timer = setInterval(() => {
+        start++;
+        el.textContent = start + suffix;
+        if (start >= end) clearInterval(timer);
+      }, step);
+    }
+
+    // ── WHATSAPP FORM ──
+    function enviarWhatsApp() {
+      const nome    = document.getElementById('nome').value.trim();
+      const whats   = document.getElementById('whats').value.trim();
+      const servico = document.getElementById('servico').value;
+      const msg     = document.getElementById('msg').value.trim();
+      if (!nome || !servico) { alert('Por favor, preencha pelo menos seu nome e o serviço desejado.'); return; }
+      const texto = encodeURIComponent(
+        `Olá! Me chamo *${nome}*.\n` +
+        `📞 Contato: ${whats || 'não informado'}\n` +
+        `🎯 Serviço: *${servico}*\n` +
+        `💬 ${msg || 'Gostaria de mais informações.'}`
+      );
+      window.open(`https://wa.me/5594991234567?text=${texto}`, '_blank');
+    }
+  </script>
+</body>
+</html>
